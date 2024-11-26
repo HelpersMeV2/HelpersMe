@@ -1,0 +1,5 @@
+textarea{
+    height: 10vh;
+    resize: none;
+    min-width: 300px
+}

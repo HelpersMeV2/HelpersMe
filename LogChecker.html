@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Helpers</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+
+	<link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-lg bg-body-tertiary">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" href="./index.html">Helpers</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+	        <li class="nav-item">
+	          <a class="nav-link" aria-current="page" href="./Diviseur.html">Diviseur</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" href="./LogChecker.html">Log Checker</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" aria-current="page" href="./proxy.html">Proxy Update</a>
+	        </li>
+	    </div>
+	  </div>
+	</nav>
+
+	<div class="d-flex justify-content-evenly flex-wrap">
+		<div>
+		  <label for="Profiles">Profiles</label>
+		  <textarea class="form-control" placeholder="Leave a Profiles here" id="Profiles"></textarea>
+		</div>
+
+		<div>
+		  <label for="Logs">Logs</label>
+		  <textarea class="form-control" placeholder="Leave a Logs here" id="Logs"></textarea>
+		</div>
+	</div>
+
+	<div class="d-flex justify-content-center gap-3 my-2">
+		<button type="button" onclick="checker()" class="btn btn-info">Checker</button>
+		<button type="button" onclick="downloadToExel('All')" style="display: none !important" id="All" class="btn btn-success">
+			<i class="fa fa-download btn btn-success"></i>
+		</button>
+	</div>
+
+	<div class="d-flex justify-content-evenly flex-wrap gap-3 container" style="display: none !important;" id="result">
+		<div>
+		  	<label  class="d-flex align-items-center justify-content-between" for="connected">
+			  	Connected Active Matched
+			  	<span class = "btn btn-info" onclick="copyFromThis('connected')">
+			  		Copy
+			  	</span>
+			  	<i class="fa fa-download btn btn-success" onclick="downloadToExel('connected')"></i>
+		  	</label>
+		  	<textarea class="form-control my-2" readonly="readonly" placeholder="Connected Active Matched" id="connected"></textarea>
+		  	<span>
+		  		Total Connected: 
+		  		<span id="totalConnected"></span>
+		  	</span>
+		</div>
+
+		<div>
+	  		<label  class="d-flex align-items-center justify-content-between" for="proxyDown">
+			  	Proxy Down
+			  	<span class = "btn btn-info" onclick="copyFromThis('proxyDown')">
+			  		Copy
+			  	</span>
+			  	<i class="fa fa-download btn btn-success" onclick="downloadToExel('proxyDown')"></i>
+		  	</label>
+		  	<textarea class="form-control my-2" readonly="readonly" placeholder="Proxy Down" id="proxyDown"></textarea>
+		  	<span>
+		  		Total Proxy Down: 
+		  		<span id="totalProxyDown"></span>
+		  	</span>
+		</div>
+
+		<div>
+		 	<label  class="d-flex align-items-center justify-content-between" for="maxExecutionTime">
+			  	Max Execution Time
+			  	<span class = "btn btn-info" onclick="copyFromThis('maxExecutionTime')">
+			  		Copy
+			  	</span>
+			  	<i class="fa fa-download btn btn-success" onclick="downloadToExel('maxExecutionTime')"></i>
+		  	</label>
+		  	<textarea class="form-control my-2" readonly="readonly" placeholder="Max Execution Time" id="maxExecutionTime"></textarea>
+		  	<span>
+		  		Total Max Execution Time: 
+		  		<span id="totalMaxExecutionTime"></span>
+		  	</span>
+		</div>
+
+		<div>
+		  	<label  class="d-flex align-items-center justify-content-between" for="accountRestricted">
+			  	Account Restricted
+			  	<span class = "btn btn-info" onclick="copyFromThis('accountRestricted')">
+			  		Copy
+			  	</span>
+			  	<i class="fa fa-download btn btn-success" onclick="downloadToExel('accountRestricted')"></i>
+		  	</label>
+		  	<textarea class="form-control my-2" readonly="readonly" placeholder="Account Restricted" id="accountRestricted"></textarea>
+		  	<span>
+		  		Total Account Restricted: 
+		  		<span id="totalAccountRestricted"></span>
+		  	</span>
+		</div>
+
+		<div>
+		  	<label  class="d-flex align-items-center justify-content-between" for="captchaVerification">
+			  	Captcha Verification
+			  	<span class = "btn btn-info" onclick="copyFromThis('captchaVerification')">
+			  		Copy
+			  	</span>
+			  	<i class="fa fa-download btn btn-success" onclick="downloadToExel('captchaVerification')"></i>
+		  	</label>
+		  	<textarea class="form-control my-2" readonly="readonly" placeholder="Captcha Verification" id="captchaVerification"></textarea>
+		  	<span>
+		  		Total Captcha Verification: 
+		  		<span id="totalCaptchaVerification"></span>
+		  	</span>
+		</div>
+
+		<div>
+		  	<label  class="d-flex align-items-center justify-content-between" for="wrongPassword">
+			  	Wrong Password
+			  	<span class = "btn btn-info" onclick="copyFromThis('wrongPassword')">
+			  		Copy
+			  	</span>
+			  	<i class="fa fa-download btn btn-success" onclick="downloadToExel('wrongPassword')"></i>
+		  	</label>
+		  	<textarea class="form-control my-2" readonly="readonly" placeholder="Wrong Password" id="wrongPassword"></textarea>
+		  	<span>
+		  		Total Wrong Password: 
+		  		<span id="totalWrongPassword"></span>
+		  	</span>
+		</div>
+
+		<div>
+		  	<label  class="d-flex align-items-center justify-content-between" for="phoneNumber">
+			  	Phone Number
+			  	<span class = "btn btn-info" onclick="copyFromThis('phoneNumber')">
+			  		Copy
+			  	</span>
+			  	<i class="fa fa-download btn btn-success" onclick="downloadToExel('phoneNumber')"></i>
+		 	</label>
+		  	<textarea class="form-control my-2" readonly="readonly" placeholder="Phone Number" id="phoneNumber"></textarea>
+		  	<span>
+		  		Total Phone Number: 
+		  		<span id="totalPhoneNumber"></span>
+		  	</span>
+		</div>
+
+		<div>
+		  	<label  class="d-flex align-items-center justify-content-between" for="unusualActivity">
+			  	Unusual Activity
+			  	<span class = "btn btn-info" onclick="copyFromThis('unusualActivity')">
+			  		Copy
+			  	</span>
+			  	<i class="fa fa-download btn btn-success" onclick="downloadToExel('unusualActivity')"></i>
+		  	</label>
+			<textarea class="form-control my-2" readonly="readonly" placeholder="Unusual Activity" id="unusualActivity"></textarea>
+		  	<span>
+		  		Total Unusual Activity: 
+		  		<span id="totalUnusualActivity"></span>
+		  	</span>
+		</div>
+
+		<div>
+			<label  class="d-flex align-items-center justify-content-between" for="accountDisabled">
+			  	Account Disabled
+			  	<span class = "btn btn-info" onclick="copyFromThis('accountDisabled')">
+			  		Copy
+			  	</span>
+			  	<i class="fa fa-download btn btn-success" onclick="downloadToExel('accountDisabled')"></i>
+			</label>
+			<textarea class="form-control my-2" readonly="readonly" placeholder="Account Disabled" id="accountDisabled"></textarea>
+		  	<span>
+		  		Total Account Disabled: 
+		  		<span id="totalAccountDisabled"></span>
+		  	</span>
+		</div>
+
+		<div>
+			<label  class="d-flex align-items-center justify-content-between" for="NotLog">
+			  	Not Log
+			  	<span class = "btn btn-info" onclick="copyFromThis('notLogs')">
+			  		Copy
+			  	</span>
+			  	<i class="fa fa-download btn btn-success" onclick="downloadToExel('notLogs')"></i>
+			</label>
+			<textarea class="form-control my-2" readonly="readonly" placeholder="Not Log" id="notLogs"></textarea>
+		  	<span>
+		  		Total Not Log: 
+		  		<span id="totalNotLog"></span>
+		  	</span>
+		</div>
+
+		<div>
+			<label  class="d-flex align-items-center justify-content-between" for="others">
+			  	Others
+			  	<span class = "btn btn-info" onclick="copyFromThis('others')">
+			  		Copy
+			  	</span>
+			  	<i class="fa fa-download btn btn-success" onclick="downloadToExel('others')"></i>
+			</label>
+			<textarea class="form-control my-2" readonly="readonly" placeholder="Others" id="others"></textarea>
+		  	<span>
+		  		Total Others: 
+		  		<span id="totalOthers"></span>
+		  	</span>
+		</div>
+	</div>
+
+	<script src="./js/main.js"></script>
+	<script src="./js/LogChecker.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Excel</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+</head>
+
+<body>
+    <button id="generateExcel">Generate Excel</button>
+
+    <script>
+        function fusionnerTableaux(tableaux) {
+            let resultat = '';
+        
+            let longueurMax = Math.max(...tableaux.map(t => t.length));
+        
+            for (let i = 0; i < longueurMax; i++) {
+                let ligne = '';
+                for (let j = 0; j < tableaux.length; j++) {
+                    if (tableaux[j][i] !== undefined) {
+                        ligne += tableaux[j][i];
+                    }
+                    if (j < tableaux.length - 1) {
+                        ligne += '\t';
+                    }
+                }
+                resultat += ligne + '\n';
+            }
+        
+            return resultat;
+        }
+        document.getElementById('generateExcel').addEventListener('click', function () {
+            // Votre tableau de données
+            const dataArray = [
+                [
+                    "5576\n5596\n5597\n5684\n5600",
+                    "5599\n5763\n5826\n5857\n5791",
+                    "6092\n5870\n6089\n6145\n5867",
+                    "6087\n6284\n5861\n5864\n5879"
+                ],
+                [
+                    "5576\n5596\n5597\n5684",
+                    "5600\n5599\n5763\n5826",
+                    "5857\n5791\n6092\n5870",
+                    "6089\n6145\n5867\n6087\n6284\n5861\n5864"
+                ],
+                [
+                    "5576\n5596\n5597\n5684\n5600",
+                    "5599\n5763\n5826\n5857\n5791",
+                    "6092\n5870\n6089\n6145\n5867",
+                    "6087\n6284\n5861\n5864\n5879\n1234"
+                ]
+            ];
+
+            let rdps = ""
+
+            for (var i = 0; i < dataArray.length; i++) {
+                array = dataArray[i]
+                rdps += `RDP${i + 1}` + '\t'
+            }
+            rdps += "\n"
+
+
+            const maxColumns = Math.max(...dataArray.map(row => row.length));
+            const transformedArray = Array.from({ length: maxColumns }, () => []);
+
+            let index = 0;
+            let result = [];
+            while (index < dataArray[0].length) {
+                dataArray.forEach((row, i) => {
+                    if (!result[i]) {
+                        result[i] = [];
+                    }
+                    result[i].push(row[index]);
+                });
+                index++;
+            }
+
+            for (let i = 0; i < result.length; i++) {
+                result[i] = result[i].join('\n\n\n').split('\n');
+            }
+
+            let max = result[0].length;
+            for (let i = 1; i < result.length; i++) {
+                if (result[i].length > max) {
+                    max = result[i].length;
+                }
+            }
+
+            index = 0;
+            let result2 = [];
+            while (index < max) {
+                result.forEach((row, i) => {
+                    if (!result2[i]) {
+                        result2[i] = [];
+                    }
+                    result2[i].push(row[index]);
+                });
+                index++;
+            }
+
+            let profilesByDrop = fusionnerTableaux(result2)
+
+            let allData = rdps + profilesByDrop;
+
+            // Create a Blob from the data
+            let blob = new Blob([allData], { type: 'text/csv' });
+
+            // Create a download link
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'data.xls';  // Set desired file name here
+            link.style.display = 'none';
+            document.body.appendChild(link);
+
+            // Trigger the download by simulating a click on the link
+            link.click();
+
+            // Clean up
+            document.body.removeChild(link);
+                    });
+    </script>
+</body>
+
+</html>
